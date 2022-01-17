@@ -3,7 +3,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router'
 import wb from "./registerServiceWorker";
-import store from "./store/index"
+import store from './store'
 
 Vue.prototype.$workbox = wb;
 

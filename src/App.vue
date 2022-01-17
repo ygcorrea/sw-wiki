@@ -1,12 +1,13 @@
 <template>
-  <v-app id="app" :class="{ 'theme-dark': nightMode }">
-    <div class="container">
-      <nav>
+  <v-app id="app"  :class="[nightMode ? 'theme-dark' : 'theme-light']">
+    <div class="container mb-5">
+      <nav :class="[nightMode ? 'bg-black' : 'bg-white']">
+        <img src="./assets/logoSW.png" alt="logo" />
         <v-icon
           class="icons"
           :class="{ 'icon-sun': nightMode }"
           v-if="nightMode"
-          @click="nightMode = !nightMode"
+          @click="setNightMode()"
         >
           mdi-white-balance-sunny
         </v-icon>
@@ -14,7 +15,7 @@
           class="icons"
           :class="{ 'icon-moon': !nightMode }"
           v-else
-          @click="nightMode = !nightMode"
+          @click="setNightMode()"
         >
           mdi-weather-night</v-icon
         >
@@ -23,7 +24,6 @@
     <router-view />
   </v-app>
 </template>
-
 <script>
 export default {
   data() {
@@ -40,16 +40,15 @@ export default {
     this.nightMode = JSON.parse(localStorage.getItem("nightMode"));
   },
   watch: {
-      nightMode: function() {
-        localStorage.setItem("nightMode", JSON.stringify(this.nightMode));
-      }
+    nightMode: function () {
+      localStorage.setItem("nightMode", JSON.stringify(this.nightMode));
+      this.$store.commit("setNightMode", this.nightMode);
     },
-    computed: {
-    nightModeState () {
-      return this.$store.state.nightMode
-    },
-    },
+  },
   methods: {
+    setNightMode() {
+      this.nightMode = !this.nightMode;
+    },
     async accept() {
       this.showUpgradeUI = false;
       await this.$workbox.messageSW({ type: "SKIP_WAITING" });
@@ -70,13 +69,19 @@ export default {
   position: relative;
 
   nav {
-    position: absolute;
-    width: calc(100% - 15px);
-    height: 50px;
+    position: fixed;
+    z-index: 2;
+    height: 80px;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    display: flex;
+    align-items: center;
+    img {
+      height: 100%;
+      width: auto;
+    }
     .icons {
       position: absolute;
       top: 10px;
@@ -91,9 +96,20 @@ export default {
       color: #1478f3;
     }
   }
+  .bg-black {
+    background: #000;
+  }
+
+  .bg-white {
+    background: rgb(255, 255, 255);
+  }
   &.theme-dark {
     color: #efefef;
     background-color: #333;
+  }
+   &.theme-light {
+    color: #333;
+    background-color: #efefef;
   }
 }
 </style>
