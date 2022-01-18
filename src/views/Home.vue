@@ -6,6 +6,9 @@
         :dark="isDark"
         class="ma-3"
         color="primary"
+        label="Search.."
+        outlined
+        dense
         v-model="searchName"
         @keydown.enter.prevent="getFilteredData"
       >
