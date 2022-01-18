@@ -91,6 +91,7 @@ export default {
     img {
       height: 100%;
       width: auto;
+      cursor: pointer;
     }
     @media screen and (max-width: 600px) {
       img {

@@ -21,8 +21,7 @@
             <v-tabs show-arrows left>
               <v-tab>Characteristics</v-tab>
               <v-tab>Films</v-tab>
-              <v-tab>Starships</v-tab>
-
+              <v-tab v-if="starshipItems.length">Starships</v-tab>
               <v-tab-item
                 :class="[isDark ? 'theme-dark' : 'theme-light']"
                 v-for="n in 3"
