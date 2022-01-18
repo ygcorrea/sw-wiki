@@ -1,8 +1,8 @@
 <template>
-  <v-app id="app"  :class="[nightMode ? 'theme-dark' : 'theme-light']">
+  <v-app id="app" :class="[nightMode ? 'theme-dark' : 'theme-light']">
     <div class="container mb-5">
       <nav :class="[nightMode ? 'bg-black' : 'bg-white']">
-        <img src="./assets/logoSW.png" alt="logo" />
+        <img src="./assets/logoSW2.png" alt="logo" @click="goHome()" />
         <v-icon
           class="icons"
           :class="{ 'icon-sun': nightMode }"
@@ -22,6 +22,13 @@
       </nav>
     </div>
     <router-view />
+    <v-footer padless :dark="nightMode">
+      <v-card :dark="nightMode" class="flex" flat tile>
+        <v-card-text  class="py-2 text-center">
+          {{ new Date().getFullYear() }} — <strong>Made with 💜 by ygcorrea</strong>
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 <script>
@@ -53,6 +60,9 @@ export default {
       this.showUpgradeUI = false;
       await this.$workbox.messageSW({ type: "SKIP_WAITING" });
     },
+    goHome(){
+      this.$router.push('/')
+    }
   },
 };
 </script>
@@ -82,6 +92,11 @@ export default {
       height: 100%;
       width: auto;
     }
+    @media screen and (max-width: 600px) {
+      img {
+        height: 70%;
+      }
+    }
     .icons {
       position: absolute;
       top: 10px;
@@ -93,7 +108,7 @@ export default {
       color: #fcda5f;
     }
     .icon-moon {
-      color: #1478f3;
+      color: #BB86FC;
     }
   }
   .bg-black {
@@ -104,12 +119,12 @@ export default {
     background: rgb(255, 255, 255);
   }
   &.theme-dark {
-    color: #efefef;
-    background-color: #333;
+    color: #dddddd;
+    background-color: #161616;
   }
-   &.theme-light {
+  &.theme-light {
     color: #333;
-    background-color: #efefef;
+    background-color: #dddddd;
   }
 }
 </style>
