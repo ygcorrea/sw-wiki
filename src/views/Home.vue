@@ -106,8 +106,6 @@ export default {
           this.previousPage = character.data.previous;
           this.emptyState = null;
           this.searchName = "";
-          console.log(this.nextPage);
-          console.log(this.previousPage);
         });
     },
     getFilteredData() {
@@ -122,7 +120,6 @@ export default {
                 "We didn't find any results for this search.";
             }
             this.charactersList = filteredResult.data.results;
-            console.log(this.charactersList);
           });
       } else {
         this.getDataFromApi();
@@ -151,10 +148,7 @@ export default {
       });
     },
     goToAboutPage(item) {
-      console.log(item);
       let infoCharacter = JSON.stringify(item);
-      console.log(infoCharacter);
-
       this.$router.push({ name: "About", params: { info: infoCharacter } });
     },
   },
