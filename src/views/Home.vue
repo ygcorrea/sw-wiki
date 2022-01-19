@@ -10,6 +10,7 @@
         outlined
         dense
         v-model="searchName"
+        @keyup="update"
         @keydown.enter.prevent="getFilteredData"
       >
         <template slot="append">
@@ -53,26 +54,26 @@
       </div>
     </v-row>
     <v-container v-if="!emptyState" class="main__container" dark>
-        <table>
-          <tr>
-            <th>Character Name</th>
-            <th>Birth year</th>
-            <th>Height</th>
-            <th>Mass</th>
-            <th>Gender</th>
-          </tr>
-          <tr
-            v-for="(item, i) in charactersList"
-            :key="i"
-            @click="goToAboutPage(item)"
-          >
-            <td>{{ item.name }}</td>
-            <td>{{ item.birth_year }}</td>
-            <td>{{ item.height }}</td>
-            <td>{{ item.mass }}</td>
-            <td>{{ item.gender }}</td>
-          </tr>
-        </table>
+      <table>
+        <tr>
+          <th>Character Name</th>
+          <th>Birth year</th>
+          <th>Height</th>
+          <th>Mass</th>
+          <th>Gender</th>
+        </tr>
+        <tr
+          v-for="(item, i) in charactersList"
+          :key="i"
+          @click="goToAboutPage(item)"
+        >
+          <td>{{ item.name }}</td>
+          <td>{{ item.birth_year }}</td>
+          <td>{{ item.height }}</td>
+          <td>{{ item.mass }}</td>
+          <td>{{ item.gender }}</td>
+        </tr>
+      </table>
     </v-container>
     <v-container class="empty__state" v-else>
       <h3>{{ this.emptyState }}</h3>
@@ -84,6 +85,8 @@
 <script>
 import axios from "axios";
 import { mapState } from "vuex";
+import * as debounce from "lodash.debounce";
+
 export default {
   data() {
     return {
@@ -109,6 +112,7 @@ export default {
         });
     },
     getFilteredData() {
+      console.log("opa");
       if (this.searchName) {
         axios
           .get(
@@ -116,8 +120,9 @@ export default {
           )
           .then((filteredResult) => {
             if (!filteredResult.data.results.length) {
-              this.emptyState =
-                "We didn't find any results for this search.";
+              this.emptyState = "We didn't find any results for this search.";
+            } else {
+              this.emptyState = null;
             }
             this.charactersList = filteredResult.data.results;
           });
@@ -125,6 +130,9 @@ export default {
         this.getDataFromApi();
       }
     },
+     update: debounce(function() {
+      this.getFilteredData()
+    }, 300),
     clearForm() {
       this.getDataFromApi();
       this.$forceUpdate();
@@ -154,6 +162,7 @@ export default {
   },
   created() {
     this.getDataFromApi();
+    
   },
   computed: {
     ...mapState({
@@ -226,7 +235,7 @@ export default {
     bottom: 10px;
   }
 }
-#home{
+#home {
   min-height: 100vh;
 }
 </style>
