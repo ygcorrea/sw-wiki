@@ -112,8 +112,8 @@ export default {
         });
     },
     getFilteredData() {
-      console.log("opa");
       if (this.searchName) {
+        this.currentPage = 1
         axios
           .get(
             `https://swapi.dev/api/people/?search=${this.searchName}&page=${this.currentPage}`
